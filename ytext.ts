@@ -15,6 +15,7 @@
  * 1. <a>content<a>这是双标签书写方式，结束标签没有/符号
  * 2. 没有做双标签个数不是偶数的处理，所以多写会出问题
  * 3. 变量前加下划线的除了_doubleFlag、_singleFlag、_markEvent其他不能自己改
+ * 4. 直接在节点上挂载脚本即可使用
  */
 const { ccclass, property } = cc._decorator;
 
