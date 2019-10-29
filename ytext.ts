@@ -70,6 +70,9 @@ export default class Page22ytext extends cc.Component {
 
   parseStr(str: string = undefined) {
     this._config = str ? str : this.string;
+    if (typeof this._config !== "string") {
+      this._config = this._config.toString();
+    }
     let markRegex = new RegExp("(<)(\\w+)(>)", "gm");
 
     let allInfo = [];
@@ -95,7 +98,7 @@ export default class Page22ytext extends cc.Component {
       }
     }
 
-    if (contentInfo.length === 0 || allInfo.length === 0) {
+    if (contentInfo.length === 0 && allInfo.length === 0) {
       this.noMarkRender(this._config);
     } else {
       let labConfig = this.resolve(allInfo, contentInfo);
@@ -132,10 +135,10 @@ export default class Page22ytext extends cc.Component {
         //@ts-ignore
       } else if (this._doubleFlag.includes(mark)) {
         //这是双标签
-      //@ts-ignore
+        //@ts-ignore
         if (currMarks.includes(mark)) {
           //代表了当前是结束标签
-      //@ts-ignore
+          //@ts-ignore
           let i = currMarks.findIndex(e => {
             return e === mark;
           });
@@ -231,6 +234,8 @@ export default class Page22ytext extends cc.Component {
     let recovery = () => {
       this._labList.forEach(el => {
         el.active = false;
+        el.setPosition(cc.v2(0, 0));
+        el.getComponent(cc.Label).string = " ";
         el.children.forEach(el => {
           el.active = false;
         });
@@ -243,17 +248,16 @@ export default class Page22ytext extends cc.Component {
       let maxy = 0;
       this._labList.forEach(el => {
         maxx = Math.max(el.x + el.width / 2, maxx);
-        maxy = Math.max(el.y + el.height / 2, maxy);
+        maxy = Math.max(el.y, maxy);
         minx = Math.min(el.x - el.width / 2, minx);
-        miny = Math.min(el.y - el.height / 2, miny);
+        miny = Math.min(el.y, miny);
       });
-      let offsetX = (maxx-minx)/2
-      let offsetY = (maxy-miny)/2
-
-      this._labList.forEach(el=>{
-        el.x-=offsetX
-        el.y+=offsetY
-      })
+      let offsetX = (maxx - minx) / 2;
+      let offsetY = Math.max((maxy - miny) / 2, this.fontSize);
+      this._labList.forEach(el => {
+        el.x -= offsetX;
+        el.y += offsetY;
+      });
     };
     return { getLab, recovery, updateLayout };
   }
@@ -265,7 +269,6 @@ export default class Page22ytext extends cc.Component {
     l.string = content;
     //@ts-ignore
     l._updateRenderData(true);
-    this.labFactory().updateLayout()
   }
 
   labRender(config) {
@@ -299,6 +302,6 @@ export default class Page22ytext extends cc.Component {
       });
       this._pointer.x += n.width;
     }
-    this.labFactory().updateLayout()
+    this.labFactory().updateLayout();
   }
 }
