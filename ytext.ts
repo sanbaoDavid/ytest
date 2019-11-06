@@ -33,6 +33,10 @@ export default class Page22ytext extends cc.Component {
   @property
   fontSize: number = 40;
 
+  //行间距
+  @property
+  lineSpacing: number = 20;
+
   //单双标签列表
   _singleFlag: Array<string> = ["br"];
   _doubleFlag: Array<string> = ["u"];
@@ -40,7 +44,7 @@ export default class Page22ytext extends cc.Component {
   _markEvent = {
     br: () => {
       this._pointer.x = 0;
-      this._pointer.y -= this.fontSize;
+      this._pointer.y -= this.fontSize + this.lineSpacing;
     },
     u: node => {
       let ratio = 5;
