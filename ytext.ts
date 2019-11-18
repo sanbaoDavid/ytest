@@ -98,6 +98,15 @@ export default class Page22ytext extends cc.Component {
     this._renderedLsit.push(func);
   }
 
+  matchAll(str, reg) {
+    var res = [];
+    var match;
+    while ((match = reg.exec(str))) {
+      res.push(match);
+    }
+    return res;
+  }
+
   parseStr(str: string = undefined) {
     this._config = str ? str : this.string;
     if (typeof this._config !== "string") {
@@ -108,7 +117,7 @@ export default class Page22ytext extends cc.Component {
     let allInfo = [];
     let contentInfo = [];
     //@ts-ignore
-    Array.from(this._config.matchAll(markRegex), m => allInfo.push(m));
+    Array.from(this.matchAll(this._config, markRegex), m => allInfo.push(m));
 
     let flag = false;
     let content = "";
